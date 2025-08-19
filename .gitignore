@@ -1,0 +1,15 @@
+﻿bin/
+obj/
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.userprefs
+*.log
+*.tmp
+appsettings.Development.json
+*.env
+secrets.json
+wwwroot/lib/
+node_modules/
