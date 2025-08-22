@@ -2,6 +2,7 @@
 using CRM.Core.Entities;
 using CRM.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using CRM.API.DTO;
 
 namespace CRM.API.Controllers
 {
@@ -16,18 +17,43 @@ namespace CRM.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ProductReadDto>>> GetAll()
         {
-            var products = await _context.Products.ToListAsync();
-            return Ok(products);
+            var products = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .ToListAsync();
+
+            var dtos = products.Select(p => new ProductReadDto
+            {
+                ProductName = p.ProductName,
+                ProductArticle = p.ProductArticle,
+                CategoryName = p.Category?.CategoryName,
+                BrandName = p.Brand?.BrandName
+            }
+            );
+
+            return Ok(dtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<ActionResult<ProductReadDto>> GetById(int id)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductID == id);
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .FirstOrDefaultAsync(p => p.ProductID == id);
             if (product == null) return NotFound();
-            return Ok(product);
+
+            var dto = new ProductReadDto
+            {
+                ProductName = product.ProductName,
+                ProductArticle = product.ProductArticle,
+                CategoryName = product.Category?.CategoryName,
+                BrandName = product.Brand?.BrandName
+            };
+
+            return Ok(dto);
         }
 
         [HttpPost]
