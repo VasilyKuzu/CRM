@@ -12,8 +12,8 @@ namespace CRM.Core.Entities
         public decimal RetailPrice { get; set; }
         public string SupplierProductArticle { get; set; }
 
-        public Product Product { get; set; }
-        public Supplier Supplier { get; set; }
+        public Product? Product { get; set; }
+        public Supplier? Supplier { get; set; }
 
     }
 }

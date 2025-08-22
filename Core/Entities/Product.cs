@@ -10,8 +10,8 @@ namespace CRM.Core.Entities
         public int CategoryID { get; set; }
         public int BrandID { get; set; }
 
-        public Category Category { get; set; }
-        public Brand Brand { get; set; }
+        public Category? Category { get; set; }
+        public Brand? Brand { get; set; }
 
     }
 }
