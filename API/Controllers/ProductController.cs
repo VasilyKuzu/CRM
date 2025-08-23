@@ -57,27 +57,51 @@ namespace CRM.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> Create(Product product)
+        public async Task<ActionResult<ProductReadDto>> Create(ProductCreateDto createDto)
         {
+            var product = new Product
+            {
+                ProductName = createDto.ProductName,
+                ProductArticle = createDto.ProductArticle,
+                CategoryID = createDto.CategoryID,
+                BrandID = createDto.BrandID
+            };
+
+
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new {id = product.ProductID}, product);
+
+            var createdProduct = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Brand)
+            .FirstOrDefaultAsync(p => p.ProductID == product.ProductID);
+
+            var dto = new ProductReadDto
+            {
+                ProductName = createdProduct.ProductName,
+                ProductArticle = createdProduct.ProductArticle,
+                CategoryName = createdProduct.Category?.CategoryName,
+                BrandName = createdProduct.Brand?.BrandName
+            };
+
+            return CreatedAtAction(nameof(GetById), new {id = product.ProductID}, dto);
 
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Product>> Update(int id, Product product)
+        public async Task<ActionResult> Update(int id, ProductUpdateDto updateDto)
         {
-            var findedProduct = await _context.Products.FirstOrDefaultAsync(p => p.ProductID == id);
-            if (product == null) return NotFound();
+            var updateProduct = await _context.Products.FirstOrDefaultAsync(p => p.ProductID == id);
+            if (updateProduct == null) return NotFound();
 
-            findedProduct.ProductName = product.ProductName;
-            findedProduct.ProductArticle = product.ProductArticle;
-            findedProduct.CategoryID = product.CategoryID;
-            findedProduct.BrandID = product.BrandID;
+            updateProduct.ProductName = updateDto.ProductName;
+            updateProduct.ProductArticle = updateDto.ProductArticle;
+            updateProduct.CategoryID = updateDto.CategoryID;
+            updateProduct.BrandID = updateDto.BrandID;
 
             await _context.SaveChangesAsync();
-            return Ok(findedProduct);
+
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -88,7 +112,7 @@ namespace CRM.API.Controllers
             _context.Products.Remove(product);
 
             await _context.SaveChangesAsync();
-            return Ok(product);
+            return NoContent();
 
         }
 
