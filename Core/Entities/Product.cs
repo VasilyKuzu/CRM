@@ -14,5 +14,7 @@ namespace CRM.Core.Entities
         public Category? Category { get; set; }
         public Brand? Brand { get; set; }
 
+
+        public ICollection<ProductSupplier> ProductSuppliers { get; set; } = new List<ProductSupplier>();
     }
 }

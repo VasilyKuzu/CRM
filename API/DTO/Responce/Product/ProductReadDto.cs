@@ -1,7 +1,7 @@
 ﻿using CRM.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CRM.API.DTO.Responce
+namespace CRM.API.DTO.Responce.Product
 {
     public class ProductReadDto
     {

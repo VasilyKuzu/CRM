@@ -2,8 +2,8 @@
 using CRM.Core.Entities;
 using CRM.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using CRM.API.DTO.Request;
-using CRM.API.DTO.Responce;
+using CRM.API.DTO.Request.Product;
+using CRM.API.DTO.Responce.Product;
 
 namespace CRM.API.Controllers
 {
@@ -59,6 +59,38 @@ namespace CRM.API.Controllers
             return Ok(dto);
         }
 
+        [HttpGet("{id}/details")]
+        public async Task<ActionResult<ProductDetailDto>> GetProductDetails(int id)
+        {
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductSuppliers)
+                    .ThenInclude(sp => sp.Supplier)
+                .FirstOrDefaultAsync(p => p.ProductID == id);
+
+            if (product == null) return NotFound();
+
+            var dto = new ProductDetailDto
+            {
+                ProductName = product.ProductName,
+                Description = product.Description,
+                ProductArticle = product.ProductArticle,
+                CategoryName = product.Category.CategoryName,
+                BrandName = product.Brand.BrandName,
+                SuppliersPrices = product.ProductSuppliers.Select(ps => new SuppliersPriceDto
+                {
+                    SupplierProductArticle = ps.SupplierProductArticle,
+                    Availability = ps.Availability,
+                    PurchasePrice = ps.PurchasePrice,
+                    RetailPrice = ps.RetailPrice,
+                    SupplierName = ps.Supplier.SupplierName
+                }).ToList()
+            };
+
+            return Ok(dto);
+        }
+
         [HttpPost]
         public async Task<ActionResult<ProductReadDto>> Create(ProductCreateDto createDto)
         {
@@ -90,7 +122,39 @@ namespace CRM.API.Controllers
             };
 
             return CreatedAtAction(nameof(GetById), new {id = product.ProductID}, dto);
+        }
 
+        [HttpPost("product-supplier")]
+        public async Task<ActionResult<ProductDetailDto>> CreateProductSupplier([FromBody]ProductSupplierCreateDto createDto)
+        {
+            var productSupplier = new ProductSupplier
+            {
+                SupplierID = createDto.SupplierID,
+                ProductID = createDto.ProductID,
+                SupplierProductArticle = createDto.SupplierProductArticle,
+                Availability = createDto.Availability,
+                PurchasePrice = createDto.PurchasePrice,
+                RetailPrice = createDto.RetailPrice
+            };
+
+            _context.ProductSuppliers.Add(productSupplier);
+            await _context.SaveChangesAsync();
+
+            var createdProductSupplier = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Brand)
+            .FirstOrDefaultAsync(p => p.ProductID == productSupplier.ProductID);
+
+            var dto = new ProductReadDto
+            {
+                ProductName = createdProductSupplier.ProductName,
+                ProductArticle = createdProductSupplier.ProductArticle,
+                Description = createdProductSupplier.Description,
+                CategoryName = createdProductSupplier.Category?.CategoryName,
+                BrandName = createdProductSupplier.Brand?.BrandName
+            };
+
+            return CreatedAtAction(nameof(GetById), new { id = productSupplier.ProductID }, dto);
         }
 
         [HttpPut("{id}")]

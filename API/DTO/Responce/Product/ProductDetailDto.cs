@@ -1,6 +1,6 @@
 ﻿using CRM.Core.Entities.Enums;
 
-namespace CRM.API.DTO.Responce
+namespace CRM.API.DTO.Responce.Product
 {
     public class ProductDetailDto
     {
@@ -10,7 +10,7 @@ namespace CRM.API.DTO.Responce
         public string CategoryName { get; set; }
         public string BrandName { get; set; }
 
-        public List<SuppliersPriceDto> suppliersPrices { get; set; } = new List<SuppliersPriceDto>();
+        public List<SuppliersPriceDto> SuppliersPrices { get; set; } = new List<SuppliersPriceDto>();
     }
 
     public class SuppliersPriceDto
@@ -19,5 +19,6 @@ namespace CRM.API.DTO.Responce
         public AvailabilityStatus Availability { get; set; }
         public decimal PurchasePrice { get; set; }
         public decimal RetailPrice { get; set; }
+        public string SupplierName { get; set; }
     }
 }

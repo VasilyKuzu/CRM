@@ -1,9 +1,9 @@
 ﻿using CRM.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CRM.API.DTO.Request
+namespace CRM.API.DTO.Request.Product
 {
-    public class ProductUpdateDto
+    public class ProductCreateDto
     {
         public string ProductName { get; set; }
         public string ProductArticle { get; set; }
