@@ -2,7 +2,8 @@
 using CRM.Core.Entities;
 using CRM.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using CRM.API.DTO;
+using CRM.API.DTO.Request;
+using CRM.API.DTO.Responce;
 
 namespace CRM.API.Controllers
 {
@@ -28,6 +29,7 @@ namespace CRM.API.Controllers
             {
                 ProductName = p.ProductName,
                 ProductArticle = p.ProductArticle,
+                Description = p.Description,
                 CategoryName = p.Category?.CategoryName,
                 BrandName = p.Brand?.BrandName
             }
@@ -49,6 +51,7 @@ namespace CRM.API.Controllers
             {
                 ProductName = product.ProductName,
                 ProductArticle = product.ProductArticle,
+                Description = product.Description,
                 CategoryName = product.Category?.CategoryName,
                 BrandName = product.Brand?.BrandName
             };
@@ -63,6 +66,7 @@ namespace CRM.API.Controllers
             {
                 ProductName = createDto.ProductName,
                 ProductArticle = createDto.ProductArticle,
+                Description = createDto.Description,
                 CategoryID = createDto.CategoryID,
                 BrandID = createDto.BrandID
             };
@@ -80,6 +84,7 @@ namespace CRM.API.Controllers
             {
                 ProductName = createdProduct.ProductName,
                 ProductArticle = createdProduct.ProductArticle,
+                Description = createdProduct.Description,
                 CategoryName = createdProduct.Category?.CategoryName,
                 BrandName = createdProduct.Brand?.BrandName
             };
@@ -96,6 +101,7 @@ namespace CRM.API.Controllers
 
             updateProduct.ProductName = updateDto.ProductName;
             updateProduct.ProductArticle = updateDto.ProductArticle;
+            updateProduct.Description = updateDto.Description;
             updateProduct.CategoryID = updateDto.CategoryID;
             updateProduct.BrandID = updateDto.BrandID;
 

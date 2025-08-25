@@ -7,6 +7,7 @@ namespace CRM.Core.Entities
         public int ProductID { get; set; }
         public string ProductName { get; set; }
         public string ProductArticle { get; set; }
+        public string Description { get; set; }
         public int CategoryID { get; set; }
         public int BrandID { get; set; }
 
