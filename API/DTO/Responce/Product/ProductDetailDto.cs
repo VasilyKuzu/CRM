@@ -3,14 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.API.DTO.Responce.Product
 {
-    public class ProductDetailDto
+    public class ProductDetailDto : ProductReadDto
     {
-        public string ProductName { get; set; }
-        public string ProductArticle { get; set; }
-        public string Description { get; set; }
-        public string CategoryName { get; set; }
-        public string BrandName { get; set; }
-
         public List<SuppliersPriceDto> SuppliersPrices { get; set; } = new List<SuppliersPriceDto>();
     }
 
