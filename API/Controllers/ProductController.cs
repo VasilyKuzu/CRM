@@ -84,7 +84,7 @@ namespace CRM.API.Controllers
                     Availability = ps.Availability,
                     PurchasePrice = ps.PurchasePrice,
                     RetailPrice = ps.RetailPrice,
-                    SupplierName = ps.Supplier.SupplierName
+                    SupplierName = ps.Supplier.SupplierName,
                 }).ToList()
             };
 

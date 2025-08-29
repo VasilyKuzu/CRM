@@ -1,4 +1,5 @@
 ﻿using CRM.Core.Entities.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.API.DTO.Responce.Product
 {
@@ -20,5 +21,6 @@ namespace CRM.API.DTO.Responce.Product
         public decimal PurchasePrice { get; set; }
         public decimal RetailPrice { get; set; }
         public string SupplierName { get; set; }
+        public decimal Markup => RetailPrice - PurchasePrice;
     }
 }
