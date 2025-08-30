@@ -2,6 +2,9 @@
 using CRM.Core.Entities;
 using CRM.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using CRM.API.DTO.Request.Category;
+using CRM.API.DTO.Responce.Category;
+
 
 namespace CRM.API.Controllers
 {
@@ -16,39 +19,66 @@ namespace CRM.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Category>>> GetAll()
+        public async Task<ActionResult<IEnumerable<CategoryReadDto>>> GetAll()
         {
-            var category = await _context.Categories.ToListAsync();
-            return Ok(category);
+            var categories = await _context.Categories.ToListAsync();
+
+            var dtos = categories.Select(p => new CategoryReadDto
+            {
+                CategoryID = p.CategoryID,
+                CategoryName = p.CategoryName
+            }
+            );
+
+            return Ok(dtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetById(int id)
+        public async Task<ActionResult<CategoryReadDto>> GetById(int id)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(p => p.CategoryID == id);
             if (category == null) return NotFound();
-            return Ok(category);
+
+            var dto = new CategoryReadDto
+            {
+                CategoryID = category.CategoryID,
+                CategoryName = category.CategoryName
+            };
+            return Ok(dto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> Create(Category category)
+        public async Task<ActionResult<CategoryReadDto>> Create(CategoryCreateDto createCategory)
         {
+            var category = new Category
+            {
+                CategoryName = createCategory.CategoryName
+            };
+
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new {id = category.CategoryID }, category);
+
+
+            var dto = new CategoryReadDto
+            {
+                CategoryID = category.CategoryID,
+                CategoryName = category.CategoryName
+            };
+
+            return CreatedAtAction(nameof(GetById), new {id = category.CategoryID }, dto);
 
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Category>> Update(int id, Category category)
+        public async Task<ActionResult> Update(int id, CategoryUpdateDto updateCategory)
         {
             var findedCategory = await _context.Categories.FirstOrDefaultAsync(p => p.CategoryID == id);
-            if (category == null) return NotFound();
+            if (findedCategory == null) return NotFound();
 
-            findedCategory.CategoryName = category.CategoryName;
+            findedCategory.CategoryName = updateCategory.CategoryName;
 
             await _context.SaveChangesAsync();
-            return Ok(findedCategory);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -59,7 +89,7 @@ namespace CRM.API.Controllers
             _context.Categories.Remove(category);
 
             await _context.SaveChangesAsync();
-            return Ok(category);
+            return NoContent();
 
         }
 

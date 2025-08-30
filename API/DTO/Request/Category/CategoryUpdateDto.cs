@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CRM.Core.Entities
+namespace CRM.API.DTO.Request.Category
 {
-    public class Category
+    public class CategoryUpdateDto
     {
-        public int CategoryID { get; set; }
-        [Required]
         [MaxLength(80)]
         public string CategoryName { get; set; }
-        
     }
 }

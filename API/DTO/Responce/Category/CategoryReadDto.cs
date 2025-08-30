@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CRM.Core.Entities
+namespace CRM.API.DTO.Responce.Category
 {
-    public class Category
+    public class CategoryReadDto
     {
         public int CategoryID { get; set; }
-        [Required]
-        [MaxLength(80)]
         public string CategoryName { get; set; }
-        
     }
 }
