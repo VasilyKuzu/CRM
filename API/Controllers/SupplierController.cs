@@ -9,7 +9,7 @@ namespace CRM.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SupplierController : Controller
+    public class SupplierController : ControllerBase
     {
         private readonly AppDbContext _context;
         public SupplierController(AppDbContext context)

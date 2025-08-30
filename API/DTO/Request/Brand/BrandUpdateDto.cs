@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CRM.Core.Entities
+namespace CRM.API.DTO.Request.Brand
 {
-    public class Brand
+    public class BrandUpdateDto
     {
-        public int BrandID { get; set; }
-        [Required]
         [MaxLength(80)]
         public string BrandName { get; set; }
-
     }
 }
