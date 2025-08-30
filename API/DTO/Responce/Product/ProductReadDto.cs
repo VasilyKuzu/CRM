@@ -5,6 +5,7 @@ namespace CRM.API.DTO.Responce.Product
 {
     public class ProductReadDto
     {
+        public int ProductID { get; set; }
         public string ProductName { get; set; }
         public string ProductArticle { get; set; }
         public string Description { get; set; }

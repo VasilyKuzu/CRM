@@ -27,6 +27,7 @@ namespace CRM.API.Controllers
 
             var dtos = products.Select(p => new ProductReadDto
             {
+                ProductID = p.ProductID,
                 ProductName = p.ProductName,
                 ProductArticle = p.ProductArticle,
                 Description = p.Description,
@@ -49,6 +50,7 @@ namespace CRM.API.Controllers
 
             var dto = new ProductReadDto
             {
+                ProductID = product.ProductID,
                 ProductName = product.ProductName,
                 ProductArticle = product.ProductArticle,
                 Description = product.Description,
@@ -73,6 +75,7 @@ namespace CRM.API.Controllers
 
             var dto = new ProductDetailDto
             {
+                ProductID = product.ProductID,
                 ProductName = product.ProductName,
                 Description = product.Description,
                 ProductArticle = product.ProductArticle,
