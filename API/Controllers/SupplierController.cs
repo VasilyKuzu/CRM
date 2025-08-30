@@ -2,6 +2,8 @@
 using CRM.Core.Entities;
 using CRM.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using CRM.API.DTO.Request.Supplier;
+using CRM.API.DTO.Responce.Supplier;
 
 namespace CRM.API.Controllers
 {
@@ -16,42 +18,76 @@ namespace CRM.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Supplier>>> GetAll()
+        public async Task<ActionResult<IEnumerable<SupplierReadDto>>> GetAll()
         {
             var suppliers = await _context.Suppliers.ToListAsync();
-            return Ok(suppliers);
+
+            var dtos = suppliers.Select(p => new SupplierReadDto
+            {
+                SupplierID = p.SupplierID,
+                SupplierName = p.SupplierName,
+                Phone = p.Phone,
+                Email = p.Email
+            }
+            );
+
+            return Ok(dtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Supplier>> GetById(int id)
+        public async Task<ActionResult<SupplierReadDto>> GetById(int id)
         {
             var supplier = await _context.Suppliers.FirstOrDefaultAsync(p => p.SupplierID == id);
             if (supplier == null) return NotFound();
-            return Ok(supplier);
+
+            var dto = new SupplierReadDto
+            {
+                SupplierID = supplier.SupplierID,
+                SupplierName = supplier.SupplierName,
+                Phone = supplier.Phone,
+                Email = supplier.Email,
+            };
+
+            return Ok(dto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Supplier>> Create(Supplier supplier)
+        public async Task<ActionResult<SupplierReadDto>> Create(SupplierCreateDto createDto)
         {
+            var supplier = new Supplier
+            {
+                SupplierName = createDto.SupplierName,
+                Phone = createDto.Phone,
+                Email = createDto.Email
+            };
+
             _context.Suppliers.Add(supplier);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new {id = supplier.SupplierID}, supplier);
+
+            var dto = new SupplierReadDto
+            {
+                SupplierID = supplier.SupplierID,
+                SupplierName = supplier.SupplierName,
+                Phone = supplier.Phone,
+                Email = supplier.Email,
+            };
+
+            return CreatedAtAction(nameof(GetById), new {id = supplier.SupplierID}, dto);
 
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Supplier>> Update(int id, Supplier supplier)
+        public async Task<ActionResult> Update(int id, SupplierUpdateDto updateSupplier)
         {
             var findedSupplier = await _context.Suppliers.FirstOrDefaultAsync(p => p.SupplierID == id);
-            if (supplier == null) return NotFound();
+            if (findedSupplier == null) return NotFound();
 
-            findedSupplier.SupplierName = supplier.SupplierName;
-            findedSupplier.Phone = supplier.Phone;
-            findedSupplier.Email = supplier.Email;
-
+            findedSupplier.SupplierName = updateSupplier.SupplierName;
+            findedSupplier.Phone = updateSupplier.Phone;
+            findedSupplier.Email = updateSupplier.Email;
 
             await _context.SaveChangesAsync();
-            return Ok(findedSupplier);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -62,7 +98,7 @@ namespace CRM.API.Controllers
             _context.Suppliers.Remove(supplier);
 
             await _context.SaveChangesAsync();
-            return Ok(supplier);
+            return NoContent();
         }
 
     }

@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CRM.Core.Entities
+namespace CRM.API.DTO.Request.Supplier
 {
-    public class Supplier
+    public class SupplierUpdateDto
     {
-        public int SupplierID { get; set; }
-        [Required]
         public string SupplierName { get; set; }
 
         [MaxLength(20)]

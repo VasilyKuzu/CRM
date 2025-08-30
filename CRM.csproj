@@ -17,8 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="API\DTO\Request\Supplier\" />
-    <Folder Include="API\DTO\Responce\Supplier\" />
     <Folder Include="Application\" />
   </ItemGroup>
 
