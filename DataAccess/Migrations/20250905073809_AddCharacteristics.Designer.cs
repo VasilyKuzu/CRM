@@ -2,6 +2,7 @@
 using CRM.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CRM.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250905073809_AddCharacteristics")]
+    partial class AddCharacteristics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,60 +60,6 @@ namespace CRM.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("CRM.Core.Entities.Characteristic", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("CategoryID")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("ProductID")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CategoryID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("Characteristics");
-                });
-
-            modelBuilder.Entity("CRM.Core.Entities.CharacteristicValue", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("CharacteristicID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CharacteristicID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("CharacteristicValues");
-                });
-
             modelBuilder.Entity("CRM.Core.Entities.Product", b =>
                 {
                     b.Property<int>("ProductID")
@@ -144,6 +93,32 @@ namespace CRM.Migrations
                     b.HasIndex("CategoryID");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("CRM.Core.Entities.ProductCharacteristic", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ProductID")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("Characteristics");
                 });
 
             modelBuilder.Entity("CRM.Core.Entities.ProductSupplier", b =>
@@ -207,40 +182,6 @@ namespace CRM.Migrations
                     b.ToTable("Suppliers");
                 });
 
-            modelBuilder.Entity("CRM.Core.Entities.Characteristic", b =>
-                {
-                    b.HasOne("CRM.Core.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CRM.Core.Entities.Product", null)
-                        .WithMany("Characteristics")
-                        .HasForeignKey("ProductID");
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("CRM.Core.Entities.CharacteristicValue", b =>
-                {
-                    b.HasOne("CRM.Core.Entities.Characteristic", "Characteristic")
-                        .WithMany()
-                        .HasForeignKey("CharacteristicID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CRM.Core.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Characteristic");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("CRM.Core.Entities.Product", b =>
                 {
                     b.HasOne("CRM.Core.Entities.Brand", "Brand")
@@ -258,6 +199,13 @@ namespace CRM.Migrations
                     b.Navigation("Brand");
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("CRM.Core.Entities.ProductCharacteristic", b =>
+                {
+                    b.HasOne("CRM.Core.Entities.Product", null)
+                        .WithMany("Characteristics")
+                        .HasForeignKey("ProductID");
                 });
 
             modelBuilder.Entity("CRM.Core.Entities.ProductSupplier", b =>

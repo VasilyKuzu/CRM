@@ -3,7 +3,7 @@ using CRM.Core.Entities;
 using CRM.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using CRM.API.DTO.Request.Brand;
-using CRM.API.DTO.Responce.Brand;
+using CRM.API.DTO.Response.Brand;
 
 namespace CRM.API.Controllers
 {
@@ -27,7 +27,7 @@ namespace CRM.API.Controllers
                 BrandID = p.BrandID,
                 BrandName = p.BrandName
             }
-            );
+            ).ToList();
 
             return Ok(dtos);
         }
@@ -81,7 +81,7 @@ namespace CRM.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Brand>> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             var brand = await _context.Brands.FirstOrDefaultAsync(p => p.BrandID == id);
             if (brand == null) return NotFound();

@@ -20,5 +20,7 @@ namespace CRM.Core.Entities
 
 
         public ICollection<ProductSupplier> ProductSuppliers { get; set; } = new List<ProductSupplier>();
+        public ICollection<Characteristic> Characteristics { get; set; } = new List<Characteristic>();
+
     }
 }

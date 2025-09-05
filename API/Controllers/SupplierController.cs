@@ -3,7 +3,7 @@ using CRM.Core.Entities;
 using CRM.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using CRM.API.DTO.Request.Supplier;
-using CRM.API.DTO.Responce.Supplier;
+using CRM.API.DTO.Response.Supplier;
 
 namespace CRM.API.Controllers
 {
@@ -29,7 +29,7 @@ namespace CRM.API.Controllers
                 Phone = p.Phone,
                 Email = p.Email
             }
-            );
+            ).ToList();
 
             return Ok(dtos);
         }
@@ -91,7 +91,7 @@ namespace CRM.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Supplier>> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             var supplier = await _context.Suppliers.FirstOrDefaultAsync(p => p.SupplierID == id);
             if (supplier == null) return NotFound();

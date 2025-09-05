@@ -1,4 +1,4 @@
-﻿namespace CRM.API.DTO.Responce.Brand
+﻿namespace CRM.API.DTO.Response.Brand
 {
     public class BrandReadDto
     {

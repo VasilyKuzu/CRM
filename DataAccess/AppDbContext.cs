@@ -12,6 +12,7 @@ namespace CRM.DataAccess
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<ProductSupplier> ProductSuppliers { get; set; }
-
+        public DbSet<Characteristic> Characteristics { get; set; }
+        public DbSet<CharacteristicValue> CharacteristicValues { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CRM.API.DTO.Responce.Supplier
+namespace CRM.API.DTO.Response.Supplier
 {
     public class SupplierReadDto
     {

@@ -1,7 +1,7 @@
 ﻿using CRM.Core.Entities.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CRM.API.DTO.Responce.Product
+namespace CRM.API.DTO.Response.Product
 {
     public class ProductDetailDto : ProductReadDto
     {
