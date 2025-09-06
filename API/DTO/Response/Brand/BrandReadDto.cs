@@ -2,8 +2,8 @@
 {
     public class BrandReadDto
     {
-        public int BrandID { get; set; }
-        public string BrandName { get; set; }
+        public int ID { get; set; }
+        public required string Name { get; set; }
 
     }
 }

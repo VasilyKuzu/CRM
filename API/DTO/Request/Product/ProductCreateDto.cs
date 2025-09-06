@@ -7,9 +7,10 @@ namespace CRM.API.DTO.Request.Product
     public class ProductCreateDto
     {
         [Required]
-        public string ProductName { get; set; }
-        public string ProductArticle { get; set; }
-        public string Description { get; set; }
+        public required string Name { get; set; }
+        [Required]
+        public required string Article { get; set; }
+        public string? Description { get; set; }
         [Required]
         public int CategoryID { get; set; }
         [Required]

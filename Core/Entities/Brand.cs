@@ -4,10 +4,10 @@ namespace CRM.Core.Entities
 {
     public class Brand
     {
-        public int BrandID { get; set; }
+        public int ID { get; set; }
         [Required]
         [MaxLength(80)]
-        public string BrandName { get; set; }
+        public required string Name { get; set; }
 
     }
 }

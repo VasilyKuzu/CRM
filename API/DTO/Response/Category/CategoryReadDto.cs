@@ -4,7 +4,7 @@ namespace CRM.API.DTO.Response.Category
 {
     public class CategoryReadDto
     {
-        public int CategoryID { get; set; }
-        public string CategoryName { get; set; }
+        public int ID { get; set; }
+        public required string Name { get; set; }
     }
 }

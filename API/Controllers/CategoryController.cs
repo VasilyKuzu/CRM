@@ -25,8 +25,8 @@ namespace CRM.API.Controllers
 
             var dtos = categories.Select(p => new CategoryReadDto
             {
-                CategoryID = p.CategoryID,
-                CategoryName = p.CategoryName
+                ID = p.ID,
+                Name = p.Name
             }
             ).ToList();
 
@@ -36,13 +36,13 @@ namespace CRM.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryReadDto>> GetById(int id)
         {
-            var category = await _context.Categories.FirstOrDefaultAsync(p => p.CategoryID == id);
+            var category = await _context.Categories.FirstOrDefaultAsync(p => p.ID == id);
             if (category == null) return NotFound();
 
             var dto = new CategoryReadDto
             {
-                CategoryID = category.CategoryID,
-                CategoryName = category.CategoryName
+                ID = category.ID,
+                Name = category.Name
             };
             return Ok(dto);
         }
@@ -50,9 +50,11 @@ namespace CRM.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CategoryReadDto>> Create(CategoryCreateDto createCategory)
         {
+            if (createCategory == null) return BadRequest("Данные категории не переданы");
+
             var category = new Category
             {
-                CategoryName = createCategory.CategoryName
+                Name = createCategory.Name
             };
 
             _context.Categories.Add(category);
@@ -61,21 +63,21 @@ namespace CRM.API.Controllers
 
             var dto = new CategoryReadDto
             {
-                CategoryID = category.CategoryID,
-                CategoryName = category.CategoryName
+                ID = category.ID,
+                Name = category.Name
             };
 
-            return CreatedAtAction(nameof(GetById), new {id = category.CategoryID }, dto);
+            return CreatedAtAction(nameof(GetById), new {id = category.ID }, dto);
 
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, CategoryUpdateDto updateCategory)
         {
-            var findedCategory = await _context.Categories.FirstOrDefaultAsync(p => p.CategoryID == id);
+            var findedCategory = await _context.Categories.FirstOrDefaultAsync(p => p.ID == id);
             if (findedCategory == null) return NotFound();
 
-            findedCategory.CategoryName = updateCategory.CategoryName;
+            findedCategory.Name = updateCategory.Name;
 
             await _context.SaveChangesAsync();
             return NoContent();
@@ -84,7 +86,7 @@ namespace CRM.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var category = await _context.Categories.FirstOrDefaultAsync(p => p.CategoryID == id);
+            var category = await _context.Categories.FirstOrDefaultAsync(p => p.ID == id);
             if (category == null) return NotFound();
             _context.Categories.Remove(category);
 

@@ -27,12 +27,12 @@ namespace CRM.API.Controllers
 
             var dtos = products.Select(p => new ProductReadDto
             {
-                ProductID = p.ProductID,
-                ProductName = p.ProductName,
-                ProductArticle = p.ProductArticle,
+                ID = p.ID,
+                Name = p.Name,
+                Article = p.Article,
                 Description = p.Description,
-                CategoryName = p.Category?.CategoryName,
-                BrandName = p.Brand?.BrandName
+                CategoryName = p.Category?.Name ?? "Не указано",
+                BrandName = p.Brand?.Name ?? "Не указано"
             }
             ).ToList();
 
@@ -45,17 +45,17 @@ namespace CRM.API.Controllers
             var product = await _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Brand)
-                .FirstOrDefaultAsync(p => p.ProductID == id);
+                .FirstOrDefaultAsync(p => p.ID == id);
             if (product == null) return NotFound();
 
             var dto = new ProductReadDto
             {
-                ProductID = product.ProductID,
-                ProductName = product.ProductName,
-                ProductArticle = product.ProductArticle,
+                ID = product.ID,
+                Name = product.Name,
+                Article = product.Article,
                 Description = product.Description,
-                CategoryName = product.Category?.CategoryName,
-                BrandName = product.Brand?.BrandName
+                CategoryName = product.Category?.Name ?? "Не указано",
+                BrandName = product.Brand?.Name ?? "Не указано"
             };
 
             return Ok(dto);
@@ -69,25 +69,25 @@ namespace CRM.API.Controllers
                 .Include(p => p.Brand)
                 .Include(p => p.ProductSuppliers)
                     .ThenInclude(sp => sp.Supplier)
-                .FirstOrDefaultAsync(p => p.ProductID == id);
+                .FirstOrDefaultAsync(p => p.ID == id);
 
             if (product == null) return NotFound();
 
             var dto = new ProductDetailDto
             {
-                ProductID = product.ProductID,
-                ProductName = product.ProductName,
+                ID = product.ID,
+                Name = product.Name,
                 Description = product.Description,
-                ProductArticle = product.ProductArticle,
-                CategoryName = product.Category.CategoryName,
-                BrandName = product.Brand.BrandName,
+                Article = product.Article,
+                CategoryName = product.Category?.Name ?? "Не указано",
+                BrandName = product.Brand?.Name ?? "Не указано",
                 SuppliersPrices = product.ProductSuppliers.Select(ps => new SuppliersPriceDto
                 {
                     SupplierProductArticle = ps.SupplierProductArticle,
                     Availability = ps.Availability,
                     PurchasePrice = ps.PurchasePrice,
                     RetailPrice = ps.RetailPrice,
-                    SupplierName = ps.Supplier.SupplierName,
+                    SupplierName = ps.Supplier?.Name ?? "Не указано",
                 }).ToList()
             };
 
@@ -97,15 +97,16 @@ namespace CRM.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductReadDto>> Create(ProductCreateDto createDto)
         {
+            if (createDto == null) return BadRequest("Данные продукта не переданы");
+
             var product = new Product
             {
-                ProductName = createDto.ProductName,
-                ProductArticle = createDto.ProductArticle,
+                Name = createDto.Name,
+                Article = createDto.Article,
                 Description = createDto.Description,
                 CategoryID = createDto.CategoryID,
                 BrandID = createDto.BrandID
             };
-
 
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
@@ -113,23 +114,25 @@ namespace CRM.API.Controllers
             var createdProduct = await _context.Products
             .Include(p => p.Category)
             .Include(p => p.Brand)
-            .FirstOrDefaultAsync(p => p.ProductID == product.ProductID);
+            .FirstAsync(p => p.ID == product.ID);
 
             var dto = new ProductReadDto
             {
-                ProductName = createdProduct.ProductName,
-                ProductArticle = createdProduct.ProductArticle,
+                Name = createdProduct.Name,
+                Article = createdProduct.Article,
                 Description = createdProduct.Description,
-                CategoryName = createdProduct.Category?.CategoryName,
-                BrandName = createdProduct.Brand?.BrandName
+                CategoryName = createdProduct.Category?.Name ?? "Не указано",
+                BrandName = createdProduct.Brand?.Name ?? "Не указано"
             };
 
-            return CreatedAtAction(nameof(GetById), new {id = product.ProductID}, dto);
+            return CreatedAtAction(nameof(GetById), new {id = product.ID}, dto);
         }
 
         [HttpPost("product-supplier")]
         public async Task<ActionResult<ProductDetailDto>> CreateProductSupplier([FromBody]ProductSupplierCreateDto createDto)
         {
+            if (createDto == null) return BadRequest("Данные не переданы");
+
             var productSupplier = new ProductSupplier
             {
                 SupplierID = createDto.SupplierID,
@@ -146,15 +149,15 @@ namespace CRM.API.Controllers
             var createdProductSupplier = await _context.Products
             .Include(p => p.Category)
             .Include(p => p.Brand)
-            .FirstOrDefaultAsync(p => p.ProductID == productSupplier.ProductID);
+            .FirstAsync(p => p.ID == productSupplier.ProductID);
 
             var dto = new ProductReadDto
             {
-                ProductName = createdProductSupplier.ProductName,
-                ProductArticle = createdProductSupplier.ProductArticle,
+                Name = createdProductSupplier.Name,
+                Article = createdProductSupplier.Article,
                 Description = createdProductSupplier.Description,
-                CategoryName = createdProductSupplier.Category?.CategoryName,
-                BrandName = createdProductSupplier.Brand?.BrandName
+                CategoryName = createdProductSupplier.Category?.Name ?? "Не указано",
+                BrandName = createdProductSupplier.Brand?.Name ?? "Не указано"
             };
 
             return CreatedAtAction(nameof(GetById), new { id = productSupplier.ProductID }, dto);
@@ -163,11 +166,11 @@ namespace CRM.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, ProductUpdateDto updateDto)
         {
-            var updateProduct = await _context.Products.FirstOrDefaultAsync(p => p.ProductID == id);
+            var updateProduct = await _context.Products.FirstOrDefaultAsync(p => p.ID == id);
             if (updateProduct == null) return NotFound();
 
-            updateProduct.ProductName = updateDto.ProductName;
-            updateProduct.ProductArticle = updateDto.ProductArticle;
+            updateProduct.Name = updateDto.Name;
+            updateProduct.Article = updateDto.Article;
             updateProduct.Description = updateDto.Description;
             updateProduct.CategoryID = updateDto.CategoryID;
             updateProduct.BrandID = updateDto.BrandID;
@@ -180,7 +183,7 @@ namespace CRM.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductID == id);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.ID == id);
             if (product == null) return NotFound();
             _context.Products.Remove(product);
 

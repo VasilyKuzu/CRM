@@ -4,7 +4,8 @@ namespace CRM.API.DTO.Request.Supplier
 {
     public class SupplierUpdateDto
     {
-        public string SupplierName { get; set; }
+        [Required]
+        public required string Name { get; set; }
 
         [MaxLength(20)]
         public string? Phone { get; set; }

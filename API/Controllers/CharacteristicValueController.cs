@@ -31,7 +31,7 @@ namespace CRM.API.Controllers
             var dtos = characteristicValue.Select(p => new CharacteristicValueReadDto
             {
                 ID = p.ID,
-                ProductName = p.Product.ProductName,
+                ProductName = p.Product.Name,
                 FieldName = p.Characteristic.Name,
                 Value = p.Value
             }
@@ -52,7 +52,7 @@ namespace CRM.API.Controllers
             var dto = new CharacteristicValueReadDto
             {
                 ID = characteristicValue.ID,
-                ProductName = characteristicValue.Product.ProductName,
+                ProductName = characteristicValue.Product.Name,
                 FieldName = characteristicValue.Characteristic.Name,
                 Value = characteristicValue.Value
             };
@@ -63,6 +63,8 @@ namespace CRM.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CharacteristicValueReadDto>> Create(CharacteristicValueCreateDto createDto)
         {
+            if (createDto == null) return BadRequest("Данные характеристик не переданы");
+
             var characteristicValue = new CharacteristicValue
             {
                 ProductID = createDto.ProductID,
@@ -82,7 +84,7 @@ namespace CRM.API.Controllers
             var dto = new CharacteristicValueReadDto
             {
                 ID = createdCharacteristicValue.ID,
-                ProductName = createdCharacteristicValue.Product.ProductName,
+                ProductName = createdCharacteristicValue.Product.Name,
                 FieldName = createdCharacteristicValue.Characteristic.Name,
                 Value = createdCharacteristicValue.Value
             };

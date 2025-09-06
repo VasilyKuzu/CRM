@@ -4,7 +4,8 @@ namespace CRM.API.DTO.Request.Brand
 {
     public class BrandUpdateDto
     {
+        [Required]
         [MaxLength(80)]
-        public string BrandName { get; set; }
+        public required string Name { get; set; }
     }
 }

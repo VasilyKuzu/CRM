@@ -4,16 +4,17 @@ namespace CRM.Core.Entities
 {
     public class Product
     {
-        public int ProductID { get; set; }
+        public int ID { get; set; }
 
         [Required]
-        public string ProductName { get; set; }
-        public string ProductArticle { get; set; }
-        public string Description { get; set; }
+        public required string Name { get; set; }
         [Required]
-        public int CategoryID { get; set; }
+        public required string Article { get; set; }
+        public string? Description { get; set; }
         [Required]
-        public int BrandID { get; set; }
+        public required int CategoryID { get; set; }
+        [Required]
+        public required int BrandID { get; set; }
 
         public Category? Category { get; set; }
         public Brand? Brand { get; set; }

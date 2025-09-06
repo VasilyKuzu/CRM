@@ -24,8 +24,8 @@ namespace CRM.API.Controllers
 
             var dtos = suppliers.Select(p => new SupplierReadDto
             {
-                SupplierID = p.SupplierID,
-                SupplierName = p.SupplierName,
+                ID = p.ID,
+                Name = p.Name,
                 Phone = p.Phone,
                 Email = p.Email
             }
@@ -37,13 +37,13 @@ namespace CRM.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SupplierReadDto>> GetById(int id)
         {
-            var supplier = await _context.Suppliers.FirstOrDefaultAsync(p => p.SupplierID == id);
+            var supplier = await _context.Suppliers.FirstOrDefaultAsync(p => p.ID == id);
             if (supplier == null) return NotFound();
 
             var dto = new SupplierReadDto
             {
-                SupplierID = supplier.SupplierID,
-                SupplierName = supplier.SupplierName,
+                ID = supplier.ID,
+                Name = supplier.Name,
                 Phone = supplier.Phone,
                 Email = supplier.Email,
             };
@@ -54,9 +54,11 @@ namespace CRM.API.Controllers
         [HttpPost]
         public async Task<ActionResult<SupplierReadDto>> Create(SupplierCreateDto createDto)
         {
+            if (createDto == null) return BadRequest("Данные поставщика не переданы");
+
             var supplier = new Supplier
             {
-                SupplierName = createDto.SupplierName,
+                Name = createDto.Name,
                 Phone = createDto.Phone,
                 Email = createDto.Email
             };
@@ -66,23 +68,23 @@ namespace CRM.API.Controllers
 
             var dto = new SupplierReadDto
             {
-                SupplierID = supplier.SupplierID,
-                SupplierName = supplier.SupplierName,
+                ID = supplier.ID,
+                Name = supplier.Name,
                 Phone = supplier.Phone,
                 Email = supplier.Email,
             };
 
-            return CreatedAtAction(nameof(GetById), new {id = supplier.SupplierID}, dto);
+            return CreatedAtAction(nameof(GetById), new {id = supplier.ID}, dto);
 
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, SupplierUpdateDto updateSupplier)
         {
-            var findedSupplier = await _context.Suppliers.FirstOrDefaultAsync(p => p.SupplierID == id);
+            var findedSupplier = await _context.Suppliers.FirstOrDefaultAsync(p => p.ID == id);
             if (findedSupplier == null) return NotFound();
 
-            findedSupplier.SupplierName = updateSupplier.SupplierName;
+            findedSupplier.Name = updateSupplier.Name;
             findedSupplier.Phone = updateSupplier.Phone;
             findedSupplier.Email = updateSupplier.Email;
 
@@ -93,7 +95,7 @@ namespace CRM.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var supplier = await _context.Suppliers.FirstOrDefaultAsync(p => p.SupplierID == id);
+            var supplier = await _context.Suppliers.FirstOrDefaultAsync(p => p.ID == id);
             if (supplier == null) return NotFound();
             _context.Suppliers.Remove(supplier);
 

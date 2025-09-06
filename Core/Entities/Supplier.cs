@@ -4,9 +4,9 @@ namespace CRM.Core.Entities
 {
     public class Supplier
     {
-        public int SupplierID { get; set; }
+        public int ID { get; set; }
         [Required]
-        public string SupplierName { get; set; }
+        public required string Name { get; set; }
 
         [MaxLength(20)]
         public string? Phone { get; set; }

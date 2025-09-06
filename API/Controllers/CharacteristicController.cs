@@ -31,7 +31,7 @@ namespace CRM.API.Controllers
             {
                 ID = p.ID,
                 Name = p.Name,
-                CategoryName = p.Category.CategoryName
+                CategoryName = p.Category.Name
             }
             ).ToList();
 
@@ -50,7 +50,7 @@ namespace CRM.API.Controllers
             {
                 ID = characteristic.ID,
                 Name = characteristic.Name,
-                CategoryName = characteristic.Category.CategoryName
+                CategoryName = characteristic.Category.Name
             };
 
             return Ok(dto);
@@ -59,6 +59,8 @@ namespace CRM.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CharacteristicReadDto>> Create(CharacteristicCreateDto createDto)
         {
+            if (createDto == null) return BadRequest("Данные характеристик не переданы");
+
             var characteristic = new Characteristic
             {
                 Name = createDto.Name,
@@ -78,7 +80,7 @@ namespace CRM.API.Controllers
             {
                 ID = createdCharacteristic.ID,
                 Name = createdCharacteristic.Name,
-                CategoryName = createdCharacteristic.Category.CategoryName
+                CategoryName = createdCharacteristic.Category.Name
             };
 
             return CreatedAtAction(nameof(GetById), new { id = characteristic.ID }, dto);

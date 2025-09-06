@@ -4,7 +4,8 @@ namespace CRM.API.DTO.Request.Category
 {
     public class CategoryUpdateDto
     {
+        [Required]
         [MaxLength(80)]
-        public string CategoryName { get; set; }
+        public required string Name { get; set; }
     }
 }

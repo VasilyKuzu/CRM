@@ -4,9 +4,9 @@ namespace CRM.API.DTO.Response.Supplier
 {
     public class SupplierReadDto
     {
-        public int SupplierID { get; set; }
-        public string SupplierName { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
+        public int ID { get; set; }
+        public required string Name { get; set; }
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
     }
 }
