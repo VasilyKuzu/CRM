@@ -8,9 +8,10 @@ namespace CRM.Core.Entities
     {
         public int ID { get; set; }
         public int ProductID { get; set; }
-        public Product Product { get; set; }
         public int CharacteristicID { get; set; }
-        public Characteristic Characteristic { get; set; }
-        public string Value { get; set; }
+        [Required]
+        public required string Value { get; set; }
+        public Product? Product { get; set; }
+        public Characteristic? Characteristic { get; set; }
     }
 }

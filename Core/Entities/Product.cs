@@ -11,6 +11,8 @@ namespace CRM.Core.Entities
         [Required]
         public required string Article { get; set; }
         public string? Description { get; set; }
+        public int Stock { get; set; }
+
         [Required]
         public required int CategoryID { get; set; }
         [Required]

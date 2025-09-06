@@ -7,10 +7,10 @@ namespace CRM.Core.Entities
     {
         public int ID { get; set; }
         [Required]
-        public string Name { get; set; }
+        public required string Name { get; set; }
         [Required]
-        public int CategoryID { get; set; }
+        public required int CategoryID { get; set; }
 
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
     }
 }
